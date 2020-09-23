@@ -1,9 +1,9 @@
-#include "stdio.h"
-#include "math.h"
+#include <cmath>
+#include <iostream>
 
 double func(double x);
-double I1(double(*const f)(double),double x0, double x1);
-double I2(double(*const f)(double),double x0, double x1);
+double I2(double (*const f)(double), const double x0, const double x1);
+double I1(double (*const f)(double), const double x0, const double x1);
 
 double ASI(double (*const f)(double), const double a, const double b);
 double ASI(double (*const f)(double), const double a, const double b, const double tol);
@@ -11,11 +11,17 @@ double ASI(double (*const f)(double), const double a, const double b, const doub
 
 int main(int argc, char const *argv[])
 {
+	double true_val = 2.5008091103361667; // from WolframAlpha	
+	int tol_powers[] = {-2, -3, -4};
 	
-	int n = atoi(argv[1]);
-	double tol = pow(10, -n);
-	printf("Tolerance: %f\n", tol);
-	printf("%f\n", ASI(func, -1, 1, tol));
+	for (int tol_power : tol_powers) {
+		double tol = pow(10, tol_power);
+		double res = ASI(func, -1, 1, tol);
+		printf("Tolerance: %f\n", tol);
+		printf("Result: %f\n", res);
+		printf("Error: %f\n", fabs(res - true_val));
+		printf("--------------\n");
+	}
 
 	return 0;
 }
