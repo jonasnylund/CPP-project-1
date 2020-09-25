@@ -55,7 +55,7 @@ int main(int argc, char const *argv[])
 				printf("--------------\n");
 				printf("Diff cos: %f\n", cosDiff);
 				printf("N+1st term: %f\n", cos_next_term);
-				printf("|cosTaylor(N,x) - cos(x)| <= |term N+1|:");
+				printf("|cosTaylor(N,x) - cos(x)| <= |term N+1|: ");
 				printf("%s\n", cosBounded ? "true" : "false");
 				printf("==============\n");
 

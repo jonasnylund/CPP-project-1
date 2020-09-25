@@ -1,6 +1,6 @@
 #include "taylor.hpp"
 
-double sinTaylor(const int N, const double x) {
+double sinTaylor(const int &N, const double &x) {
   double x_sq = x*x;
   double res = 1; // init to 1 as a result of using Horner's alg
 
@@ -13,7 +13,7 @@ double sinTaylor(const int N, const double x) {
   return res;
 }
 
-double cosTaylor(const int N, const double x){
+double cosTaylor(const int &N, const double &x){
 
 	double res = 1;
 
