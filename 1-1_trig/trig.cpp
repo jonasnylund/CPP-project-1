@@ -1,7 +1,7 @@
 #include <cmath>
 #include <string>
 #include <iostream>
-#include "taylor.cpp"
+#include "taylor.hpp"
 
 int main(int argc, char const *argv[])
 {
