@@ -53,7 +53,23 @@ As asked we verified that each error is bounded by the $N+1^{\rm{st}}$ term, for
 \section{Task 2}
 For this task we declared and defined the functions in the main file as the program is so small. We separated the files properly in task 1 to show that we know how to do it.
 
-The algorithms was implemented as 
+The algorithms was implemented as described, and tested for the tolerances $\texttt{tol} \in \{10^-2, 10^-3, 10^-4\}$. The value we used as the real value for the integral was calculated using WolframAlpha.
+\begin{verbatim}
+    Tolerance: 0.010000
+    Result: 2.505996
+    Error: 0.005187
+    --------------
+    Tolerance: 0.001000
+    Result: 2.499857
+    Error: 0.000953
+    --------------
+    Tolerance: 0.000100
+    Result: 2.500810
+    Error: 0.000001
+    --------------
+\end{verbatim}
+
+The results seem very reasonable as they decrease with decreased tolerance. The errors are always smaller than the tolerance as well.
 
 \subsection*{\texttt{adaptint.cpp}}
 \lstinputlisting[language=C++]{1-2_adaptint/adaptint.cpp}
