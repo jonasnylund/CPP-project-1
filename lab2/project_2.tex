@@ -4,6 +4,7 @@
 \usepackage{color}
 \usepackage{hyperref} 
 \usepackage[a4paper, total={16cm, 24cm}, top=2.5cm]{geometry}
+\usepackage{amsmath, amssymb}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
 \definecolor{mygray}{rgb}{0.5,0.5,0.5}
@@ -33,8 +34,31 @@ The code for this lab can be found at \href{https://github.com/jonasnylund/SF256
 % \lstinputlisting[language=C++]{1-2_adaptint/adaptint.cpp}
 
 \section{Task 1}
+In order to implement the exponential function for real numbers we used Horner's method, to avoid explicitly calculating $x^N$ and $N!$ for large $N$. To do this efficiently we needed an estimate of what $N$ to use when approximating $\sum_{n=0}^\infty \frac{x^n}{n!} \approx \sum_{n=0}^N \frac{x^n}{n!}.$ We treated the parameter \lstinline{tol} given in the instructions as absolute error. We estimated the error $E(x, N)$ as follows, by assuming $N \geq x$:
+\begin{align*}
+    E(x, N) &= \sum_{n = N+1}^\infty \frac{x^n}{n!}\\ &=\frac{x^{N+1}}{(N+2)!}\left(1 + \frac{x}{N+3} + \frac{x^2}{(N+3)(N+4)}
+    + \frac{x^3}{(N+3)(N+4)(N+5)} + \cdots \right)\\
+    &\leq \frac{x^{N+1}}{(N+2)!}\left(1 + \frac{x}{x+3} + \frac{x^2}{(x+3)(x+4)}
+    + \frac{x^3}{(x+3)(x+4)(x+5)} + \cdots\right)\\
+    &\leq \frac{x^{N+1}}{(N+2)!}\left(1 + \frac{1}{1 + \frac{3}{x}} + \sum_{n = 3}^\infty \frac{1}{(1+\frac{n}{x})(1 + \frac{n+1}{x})} \right)\\
+    &= \frac{x^{N+1}}{(N+2)!}\left(1 + \frac{x}{x + 3} + \frac{x^2}{x+3}\right)\\
+    &= \frac{x^{N+1}}{(N+2)!}\left(1 + \frac{x(x+1)}{x + 3}\right).\\
+\end{align*}
+Hence, by increasing $N$ until 
+\begin{align*}
+    \frac{x^{N+1}}{(N+2)!}\left(1 + \frac{x(x+1)}{x + 3}\right) \leq \lstinline{tol},
+\end{align*}
+we could assure the error would be at most \lstinline{tol}, if the computer precision allowed it.\\
 
+Using the default value of \lstinline{tol = 1e-10}, the error compared to the exponential function from the standard library is below \lstinline{tol} for $x \leq 15$  (approx.). For larger $x$ the value of $e^x$ grows so large that such small absolute errors are not realisable.
+\subsection*{\texttt{main.cpp}}
+\lstinputlisting[language=C++]{2-1_myexp/main.cpp}
+\subsection*{\texttt{myexp.hpp}}
+\lstinputlisting[language=C++]{2-1_myexp/myexp.hpp}
+\subsection*{\texttt{myexp.cpp}}
+\lstinputlisting[language=C++]{2-1_myexp/myexp.cpp}
 \newpage
 \section{Task 2}
+
 
 \end{document}
