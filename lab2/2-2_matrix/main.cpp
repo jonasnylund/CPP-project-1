@@ -1,6 +1,7 @@
 #include "Matrix.hpp"
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 using namespace std;
 #include "r8mat_expm1.h"
@@ -9,6 +10,7 @@ using namespace std;
 int main(int argc, char const *argv[])
 {
 
+	srand(time(0));
 	int dim = 5;
 
 	double* exp;
