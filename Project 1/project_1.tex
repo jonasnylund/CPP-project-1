@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{hyperref} 
 \usepackage[a4paper, total={16cm, 24cm}, top=2.5cm]{geometry}
 
 \definecolor{mygreen}{rgb}{0,0.6,0}
@@ -26,6 +27,8 @@
 \begin{document}
 
 \maketitle
+
+The code for this lab can be found at \href{https://github.com/jonasnylund/CPP-project-1}{https://github.com/jonasnylund/CPP-project-1}
 
 \section{Task 1}
 We separately declared and defined the Taylor functions even though the program is very small, to see that we understood how to do it.
@@ -53,7 +56,7 @@ As asked we verified that each error is bounded by the $N+1^{\rm{st}}$ term, for
 \section{Task 2}
 For this task we declared and defined the functions in the main file as the program is so small. We separated the files properly in task 1 to show that we know how to do it.
 
-The algorithms was implemented as described, and tested for the tolerances $\texttt{tol} \in \{10^-2, 10^-3, 10^-4\}$. The value we used as the real value for the integral was calculated using WolframAlpha.
+The algorithms was implemented as described, and tested for the tolerances $\texttt{tol} \in \{10^{-2}, 10^{-3}, 10^{-4}\}$. The value we used as the real value for the integral was calculated using WolframAlpha.
 \begin{verbatim}
     Tolerance: 0.010000
     Result: 2.505996
