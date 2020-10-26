@@ -22,14 +22,13 @@ public:
 	friend Matrix operator*(const Matrix&, const Matrix&);
 	Matrix& operator*=(const double);
 	Matrix& operator/=(const double);
+
+	double* operator[](int i) const;
 	Matrix exp(const double tol=1e-10) const;
 	Matrix transpose() const;
 	double norm() const;
-	void printMatrix() const;
+	void print() const;
 	void fillMatrix(double array[], unsigned int lx, unsigned int ly, unsigned int ox, unsigned int oy);
-	
-	inline double get(unsigned int i, unsigned int j) const;
-	inline void set(double v, unsigned int i, unsigned int j);
 
 	double* getArray();
 

@@ -10,7 +10,7 @@
 Matrix Matrix::eye(const unsigned int n){
 	Matrix m(n);
 	for(unsigned int i=0; i<n; i++){
-		m.set(1, i, i);
+		m[i][i] = 1;
 	}
 	return m;
 }
@@ -115,7 +115,7 @@ Matrix& Matrix::operator*=(const Matrix& matrix){
 	for( unsigned int i=0; i<this->rows; i++){
 		for( unsigned int k=0; k<this->cols; k++){
 			for( unsigned int j=0; j<matrix.cols; j++){
-				arr[i * matrix.cols + j] += this->get(i, k) * matrix.get(k, j);
+				arr[i * matrix.cols + j] += (*this)[i][k] * matrix[k][j];
 			}
 		}
 	}
@@ -146,21 +146,25 @@ Matrix& Matrix::operator/=(const double value){
 	return *this;
 }
 
+double* Matrix::operator[](int i) const{
+	if(i >= this->rows)
+		throw std::invalid_argument("Index out of bounds");
+
+	return &(this->array[i * this->cols]);
+}
+
 Matrix Matrix::exp(const double tol) const{
-	if(this->rows != this->cols){
+	if(this->rows != this->cols)
 		throw std::invalid_argument("Matrix exponential only defined for square matrices");
-	}
 
 	int N = 100;
 	Matrix I = Matrix::eye(this->rows);
-	// I.printMatrix();
 	Matrix res = I;
 
 	for(int i=N; i>0; i--){
 		res *= *this;
 		res *= (double)1/(double)i;
 		res += I;
-		// printf("%d\n", i);
 	}
 
 	return res;
@@ -171,7 +175,7 @@ Matrix Matrix::transpose() const{
 
 	for(unsigned int i=0; i<this->rows; i++){
 		for(unsigned int j=0; j<this->cols; j++){
-			m.set(this->get(i, j), j, i);
+			m[j][i] = (*this)[i][j];
 		}
 	}
 	return m;
@@ -187,7 +191,7 @@ double Matrix::norm() const {
 	return sqrt(res);
 }
 
-void Matrix::printMatrix() const{
+void Matrix::print() const{
 
 	printf("%dx%d -> [\n", this->rows, this->cols);
 	for (unsigned int i=0; i<this->rows; i++){
@@ -195,7 +199,7 @@ void Matrix::printMatrix() const{
 		for (unsigned int j=0; j<this->cols; j++){
 			if (j > 0)
 				printf(", ");
-			printf(" %.4f", this->get(i, j));
+			printf(" %.4f", (*this)[i][j]);
 		}
 		printf("],\n");
 	}
@@ -205,17 +209,9 @@ void Matrix::printMatrix() const{
 void Matrix::fillMatrix(double array[], unsigned int lx, unsigned int ly, unsigned int ox, unsigned int oy) {
 	for (unsigned int i=0; i<lx; i++){
 		for (unsigned int j=0; j<ly; j++){
-			this->set(array[i*ly + j], ox+i, oy+j);
+			(*this)[ox+i][oy+j] = array[i*ly + j];
 		}
 	}
-}
-
-inline double Matrix::get(unsigned int i, unsigned int j) const{
-	return this->array[this->index(i, j)];
-}
-
-inline void Matrix::set(double v, unsigned int i, unsigned int j){
-	this->array[this->index(i, j)] = v;
 }
 
 inline unsigned int Matrix::index(unsigned int i, unsigned int j) const{
