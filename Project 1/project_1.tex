@@ -1,0 +1,79 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{hyperref} 
+\usepackage[a4paper, total={16cm, 24cm}, top=2.5cm]{geometry}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{language=C++,
+    basicstyle=\fontsize{10}{13}\ttfamily,
+    keywordstyle=\color{blue}\ttfamily,
+    stringstyle=\color{red}\ttfamily,
+    commentstyle=\color{green}\ttfamily,
+    morecomment=[l][\color{magenta}]{\#},
+    showstringspaces={false},
+    tabsize=2
+}
+
+
+\title{CPP project 1}
+\author{Jonas Nylund \and Anton Finnson}
+\date{September 2020}
+
+\begin{document}
+
+\maketitle
+
+The code for this lab can be found at \href{https://github.com/jonasnylund/CPP-project-1}{https://github.com/jonasnylund/CPP-project-1}
+
+\section{Task 1}
+We separately declared and defined the Taylor functions even though the program is very small, to see that we understood how to do it.
+
+Neither of the two functions reassign their input variables \lstinline{N, x}, so to reduce the number of copied variables we set the types to \lstinline{const int&} and \lstinline{const double&} respectively.
+
+As asked we verified that each error is bounded by the $N+1^{\rm{st}}$ term, for $N \in \{3,5,10\}$ and $x \in \{−1,1,2,3,5,10\}$. For all 18 choices of $(N,x)$ we printed whether the error was bounded by $N+1^{\rm{st}}$ term, both for $\sin$ and $\cos$. These results were counted, giving the following final output:
+
+\lstinline{Bounded errors: 36}
+
+\lstinline{Unbounded errors: 0}
+
+\flushleft{For higher values of $N$ the limit in precision when calculating the error as well as the $N+1^{\rm{st}}$ term resulted in some errors being marked as unbounded.}
+
+\subsection*{\texttt{trig.cpp}}
+\lstinputlisting[language=C++]{1-1_trig/trig.cpp}
+
+\subsection*{\texttt{taylor.hpp}}
+\lstinputlisting[language=C++]{1-1_trig/taylor.hpp}
+
+\subsection*{\texttt{taylor.cpp}}
+\lstinputlisting[language=C++]{1-1_trig/taylor.cpp}
+
+\newpage
+\section{Task 2}
+For this task we declared and defined the functions in the main file as the program is so small. We separated the files properly in task 1 to show that we know how to do it.
+
+The algorithms was implemented as described, and tested for the tolerances $\texttt{tol} \in \{10^{-2}, 10^{-3}, 10^{-4}\}$. The value we used as the real value for the integral was calculated using WolframAlpha.
+\begin{verbatim}
+    Tolerance: 0.010000
+    Result: 2.505996
+    Error: 0.005187
+    --------------
+    Tolerance: 0.001000
+    Result: 2.499857
+    Error: 0.000953
+    --------------
+    Tolerance: 0.000100
+    Result: 2.500810
+    Error: 0.000001
+    --------------
+\end{verbatim}
+
+The results seem very reasonable as they decrease with decreased tolerance. The errors are always smaller than the tolerance as well.
+
+\subsection*{\texttt{adaptint.cpp}}
+\lstinputlisting[language=C++]{1-2_adaptint/adaptint.cpp}
+\end{document}
