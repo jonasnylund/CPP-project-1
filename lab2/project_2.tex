@@ -36,17 +36,17 @@ The code for this lab can be found at \href{https://github.com/jonasnylund/SF256
 \section{Task 1}
 In order to implement the exponential function for real numbers we used Horner's method, to avoid explicitly calculating $x^N$ and $N!$ for large $N$. To do this efficiently we needed an estimate of what $N$ to use when approximating $\sum_{n=0}^\infty \frac{x^n}{n!} \approx \sum_{n=0}^N \frac{x^n}{n!}.$ We treated the parameter \lstinline{tol} given in the instructions as absolute error. We estimated the error $E(x, N)$ as follows, by assuming $N \geq x$:
 \begin{align*}
-    E(x, N) &= \sum_{n = N+1}^\infty \frac{x^n}{n!}\\ &=\frac{x^{N+1}}{(N+2)!}\left(1 + \frac{x}{N+3} + \frac{x^2}{(N+3)(N+4)}
-    + \frac{x^3}{(N+3)(N+4)(N+5)} + \cdots \right)\\
-    &\leq \frac{x^{N+1}}{(N+2)!}\left(1 + \frac{x}{x+3} + \frac{x^2}{(x+3)(x+4)}
-    + \frac{x^3}{(x+3)(x+4)(x+5)} + \cdots\right)\\
-    &\leq \frac{x^{N+1}}{(N+2)!}\left(1 + \frac{1}{1 + \frac{3}{x}} + \sum_{n = 3}^\infty \frac{1}{(1+\frac{n}{x})(1 + \frac{n+1}{x})} \right)\\
-    &= \frac{x^{N+1}}{(N+2)!}\left(1 + \frac{x}{x + 3} + \frac{x^2}{x+3}\right)\\
-    &= \frac{x^{N+1}}{(N+2)!}\left(1 + \frac{x(x+1)}{x + 3}\right).\\
+    E(x, N) &= \sum_{n = N+1}^\infty \frac{x^n}{n!}\\ &=\frac{x^{N+1}}{(N+1)!}\left(1 + \frac{x}{N+2} + \frac{x^2}{(N+2)(N+3)}
+    + \frac{x^3}{(N+2)(N+3)(N+4)} + \cdots \right)\\
+    &\leq \frac{x^{N+1}}{(N+1)!}\left(1 + \frac{x}{x+2} + \frac{x^2}{(x+2)(x+3)}
+    + \frac{x^3}{(x+2)(x+3)(x+4)} + \cdots\right)\\
+    &\leq \frac{x^{N+1}}{(N+1)!}\left(1 + \frac{1}{1 + \frac{2}{x}} + \sum_{n = 2}^\infty \frac{1}{(1+\frac{n}{x})(1 + \frac{n+1}{x})} \right)\\
+    &= \frac{x^{N+1}}{(N+1)!}\left(1 + \frac{x}{x + 2} + \frac{x^2}{x+2}\right)\\
+    &= \frac{x^{N+1}}{(N+1)!}\left(1 + \frac{x(x+1)}{x + 2}\right).\\
 \end{align*}
 Hence, by increasing $N$ until 
 \begin{align*}
-    \frac{x^{N+1}}{(N+2)!}\left(1 + \frac{x(x+1)}{x + 3}\right) \leq \lstinline{tol},
+    \frac{x^{N+1}}{(N+1)!}\left(1 + \frac{x(x+1)}{x + 2}\right) \leq \lstinline{tol},
 \end{align*}
 we could assure the error would be at most \lstinline{tol}, if the computer precision allowed it.\\
 
@@ -58,7 +58,10 @@ Using the default value of \lstinline{tol = 1e-10}, the error compared to the ex
 \subsection*{\texttt{myexp.cpp}}
 \lstinputlisting[language=C++]{2-1_myexp/myexp.cpp}
 \newpage
+
 \section{Task 2}
+
+
 
 
 \end{document}
