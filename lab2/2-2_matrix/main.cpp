@@ -1,7 +1,7 @@
 #include "Matrix.hpp"
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 #include "r8mat_expm1.h"

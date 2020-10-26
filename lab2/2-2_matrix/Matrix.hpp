@@ -14,8 +14,8 @@ public:
 	~Matrix();
 	Matrix& operator=(const Matrix&);
 	Matrix& operator+=(const Matrix&);
-	Matrix& operator-=(const Matrix&);
 	Matrix& operator+=(const double);
+	Matrix& operator-=(const Matrix&);
 	friend Matrix operator+(const Matrix&, const Matrix&);
 	friend Matrix operator-(const Matrix&, const Matrix&);
 	Matrix& operator*=(const Matrix&);
@@ -23,12 +23,17 @@ public:
 	Matrix& operator*=(const double);
 	Matrix& operator/=(const double);
 
-	double* operator[](int i) const;
+	double* operator[](unsigned int i) const;
 	Matrix exp(const double tol=1e-10) const;
 	Matrix transpose() const;
 	double norm() const;
 	void print() const;
-	void fillMatrix(double array[], unsigned int lx, unsigned int ly, unsigned int ox, unsigned int oy);
+	void fillMatrix(
+		double array[],
+		unsigned int lx,
+		unsigned int ly,
+		unsigned int ox,
+		unsigned int oy);
 
 	double* getArray();
 

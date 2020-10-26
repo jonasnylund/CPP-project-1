@@ -1,17 +1,20 @@
 #include "Matrix.hpp"
-#include <stdio.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>
-#include <math.h>
+#include <cstdio>
+#include <cstddef>
+#include <cstdint>
+#include <cstring>
+#include <cmath>
 #include <stdexcept>
 
-
+// Identity matrix
 Matrix Matrix::eye(const unsigned int n)
 {
 	Matrix m(n);
 	for(unsigned int i=0; i<n; i++){
-		m[i][i] = 1;
+		for (unsigned int j=0; j<n; j++){
+			if (i == j) m[i][i] = 1.0;
+			else m[i][j] = 0.0;
+		}
 	}
 	return m;
 }
@@ -167,7 +170,7 @@ Matrix& Matrix::operator/=(const double value)
 
 // =============================================================== //
 // Indexing operator
-double* Matrix::operator[](int i) const
+double* Matrix::operator[](unsigned int i) const
 {
 	if(i >= this->rows)
 		throw std::invalid_argument("Index out of bounds");
@@ -253,7 +256,12 @@ void Matrix::print() const
 	printf("]\n");
 }
 
-void Matrix::fillMatrix(double array[], unsigned int lx, unsigned int ly, unsigned int ox, unsigned int oy) 
+void Matrix::fillMatrix(
+	double array[],
+	unsigned int lx,
+	unsigned int ly,
+	unsigned int ox,
+	unsigned int oy) 
 {
 	for (unsigned int i=0; i<lx; i++){
 		for (unsigned int j=0; j<ly; j++){
