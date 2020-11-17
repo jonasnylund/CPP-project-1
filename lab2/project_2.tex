@@ -50,7 +50,7 @@ Hence, by increasing $N$ until
 \end{align*}
 we could assure the error would be at most \lstinline{tol}, if the computer precision allowed it.\\
 
-Using the default value of \lstinline{tol = 1e-10}, the error compared to the exponential function from the standard library is below \lstinline{tol} for $x \leq 15$  (approx.). For larger $x$ the value of $e^x$ grows so large that such small absolute errors are not realisable.
+Using the default value of \lstinline{tol = 1e-10}, the error compared to the exponential function from the standard library is below \lstinline{tol} for $x \leq 15$  (approx.). For larger $x$ the value of $e^x$ grows so large that such small absolute errors are not possible due to floating point precision.
 \subsection*{\texttt{main.cpp}}
 \lstinputlisting[language=C++]{2-1_myexp/main.cpp}
 \subsection*{\texttt{myexp.hpp}}
@@ -61,7 +61,14 @@ Using the default value of \lstinline{tol = 1e-10}, the error compared to the ex
 
 \section{Task 2}
 
+We implemented the matrix class as requested in the lab description. Matrix exponentiation was implemented in the same way as for scalar values, with an iterative scheme using Horners' method, but with Matrix arithmetics. Comparing the results to the \texttt{r8mat} Matlab implementation shows good agreement on the results for randomly initialized matrices.
 
+\subsection*{\texttt{main.cpp}}
+\lstinputlisting[language=C++]{2-2_matrix/main.cpp}
+\subsection*{\texttt{Matrix.hpp}}
+\lstinputlisting[language=C++]{2-2_matrix/Matrix.hpp}
+\subsection*{\texttt{Matrix.cpp}}
+\lstinputlisting[language=C++]{2-2_matrix/Matrix.cpp}
 
 
 \end{document}
