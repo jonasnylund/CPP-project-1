@@ -18,7 +18,6 @@ for i in range((width+1)*(height+1)):
 	y.append(np.fromfile(file, dtype=np.float64, count=1)[0]);
 
 # plt.scatter(x, y, 'b');
-
 x = np.array(x).reshape((height+1, width+1))
 y = np.array(y).reshape((height+1, width+1))
 

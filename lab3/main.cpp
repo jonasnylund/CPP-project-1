@@ -24,15 +24,7 @@ int main() {
   int m = 20; int n = 20;
   myDomain.generate_grid(m, n);
   myDomain.stretch(0.0, 2.0);
-  // vector<double> x_vect = myDomain.getX();
-  // vector<double> y_vect = myDomain.getY();
-  // cout << setprecision(2);
-  // for (int i = 0; i < m+1; ++i) {
-  //   for (int j = 0; j < n+1; ++j) {
-  //     cout << "(" << x_vect[j + i*(n + 1)] << ", " << y_vect[j + i*(n + 1)] << ") | \t";
-  //   }
-  //   cout << endl;
-  // }
+
 
   myDomain.toFile("myfile.bin");
 }
