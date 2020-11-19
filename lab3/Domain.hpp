@@ -30,8 +30,8 @@ private:
 	int width; // n
 	int height; // m
 
-	double phi1(double s); // from 1 to 0
-	double phi2(double s); // from 0 to 1
+	double phi1(const double s); // from 1 to 0
+	double phi2(const double s); // from 0 to 1
 };
 
 

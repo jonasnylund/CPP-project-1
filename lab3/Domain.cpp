@@ -1,5 +1,7 @@
 #include "Domain.hpp"
 #include <stdexcept>
+#include <cmath>
+// #include <iostream>
 
 bool Domain::closedDomain(Curvebase* curves[], int len){
 
@@ -110,6 +112,7 @@ void Domain::generate_grid(int m, int n) {
     double xi, eta;
     for (int i = 0; i < this->height + 1; ++i) {
       xi = i / (double) m;
+			// phi1xi = phi1(xi); phi2xi = phi2(xi);
       for (int j = 0; j < this->width + 1; ++j) {
         eta = j / (double) n;
         this->x_coor[j + i*(this->width + 1)] = phi1(xi) * this->boundary[0]->x(1 - eta)
@@ -151,11 +154,11 @@ std::vector<double> Domain::getY() {
 
 inline double Domain::phi1(const double s) {
   // from 1 to 0 when s goes from 0 to 1
-  return 1.0 - s;
+	return 1.0 - s;
 }
 
 inline double Domain::phi2(const double s) {
   // from 0 to 1 when s goes from 0 to 1
-  return s;
+	return s;
 }
 
