@@ -1,4 +1,5 @@
 #include "Domain.hpp"
+#include <stdexcept>
 
 bool Domain::closedDomain(Curvebase* curves[], int len){
 
@@ -6,9 +7,10 @@ bool Domain::closedDomain(Curvebase* curves[], int len){
 	Curvebase *current = nullptr;
 	for (int i = 0; i < len-1; ++i){
 		current = curves[i];
-		if (! (prev->x(1) == current->x(0) && prev->y(1) == current->y(0))){
+		if (! (abs(prev->x(1) - current->x(0)) < 0.001 && abs(prev->y(1) - current->y(0)) < 0.001)){
 			return false;
 		}
+		prev = current;
 	}
 	return true;
 }
@@ -17,8 +19,8 @@ bool Domain::closedDomain(Curvebase* curves[], int len){
 Domain::Domain(Curvebase& c1, Curvebase& c2, Curvebase& c3, Curvebase& c4){
 
 	Curvebase *arr[] = {&c1, &c2, &c3, &c4};
-	if (!Domain::closedDomain(arr, 4)){
-		return;
+	if (!Domain::closedDomain(arr, 4)) {
+		throw std::invalid_argument("Domain not consistent");
 	}
 
 	for (int i = 0; i < 4; ++i)
@@ -79,13 +81,6 @@ Domain::~Domain(){
 	// 	// delete[] this->y_coor;
 }
 
-
-void Domain::generate_grid(int m, int n){
-
-
-
-}
-
 // Domain Domain::fromFile(FILE *file){
 // 	// Ugh, Curvebases..??
 // 	return NULL;
@@ -106,4 +101,61 @@ void Domain::toFile(const char* filename){
 	fclose(file);
 }
 
+void Domain::generate_grid(int m, int n) {
+  if (m <= 0 || n <= 0) throw std::invalid_argument("m and n needs to be positive");
+  else { // if a grid already exists, overwrite this
+    this->height = m; this->width = n;
+    this->x_coor.resize((this->height + 1)* (this->width + 1));
+    this->y_coor.resize((this->height + 1)* (this->width + 1));
+    double xi, eta;
+    for (int i = 0; i < this->height + 1; ++i) {
+      xi = i / (double) m;
+      for (int j = 0; j < this->width + 1; ++j) {
+        eta = j / (double) n;
+        this->x_coor[j + i*(this->width + 1)] = phi1(xi) * this->boundary[0]->x(1 - eta)
+                      + phi2(xi) * this->boundary[2]->x(eta)
+                      + phi1(eta) * (
+                        this->boundary[1]->x(xi)
+                        - phi1(xi) * this->boundary[1]->x(0)
+                        - phi2(xi) * this->boundary[1]->x(1)
+                      )
+                      + phi2(eta) * (
+                        this->boundary[3]->x(1 - xi)
+                        - phi1(xi) * this->boundary[3]->x(1)
+                        - phi2(xi) * this->boundary[3]->x(0)
+                      );
+        this->y_coor[j + i*(this->width + 1)] = phi1(xi) * this->boundary[0]->y(1 - eta)
+                      + phi2(xi) * this->boundary[2]->y(eta)
+                      + phi1(eta) * (
+                        this->boundary[1]->y(xi)
+                        - phi1(xi) * this->boundary[1]->y(0)
+                        - phi2(xi) * this->boundary[1]->y(1)
+                      )
+                      + phi2(eta) * (
+                        this->boundary[3]->y(1 - xi)
+                        - phi1(xi) * this->boundary[3]->y(1)
+                        - phi2(xi) * this->boundary[3]->y(0)
+                      );
+      }
+    }
+  }
+}
+
+std::vector<double> Domain::getX() {
+  return this->x_coor;
+}
+
+std::vector<double> Domain::getY() {
+  return this->y_coor;
+}
+
+inline double Domain::phi1(const double s) {
+  // from 1 to 0 when s goes from 0 to 1
+  return 1.0 - s;
+}
+
+inline double Domain::phi2(const double s) {
+  // from 0 to 1 when s goes from 0 to 1
+  return s;
+}
 

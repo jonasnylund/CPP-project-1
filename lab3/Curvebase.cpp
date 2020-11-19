@@ -60,7 +60,7 @@ double Curvebase::y(double s) {
   return this->yp(this->p_from_s(s));
 }
 
-void Curvebase::validate_p(double p) {
+inline void Curvebase::validate_p(double p) {
   if (p < this->_pmin || p > this->_pmax) {
     std::cerr << "(p, pmin, pmax) = (" << p << ", " << _pmin << ", " << _pmax << ")" << std::endl;
     throw std::invalid_argument("p must be within [pmin, pmax]");

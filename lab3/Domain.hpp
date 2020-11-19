@@ -19,18 +19,19 @@ public:
 	~Domain();
 	void generate_grid(int m, int n);
 	void toFile(const char* filename);
-
+	std::vector<double> getX();
+  std::vector<double> getY();
 private:
 	Curvebase *boundary[4];
 
 	std::vector<double> x_coor;
 	std::vector<double> y_coor;
 
-	// double *x_coor;
-	// double *y_coor;
+	int width; // n
+	int height; // m
 
-	int width;
-	int height;
+	double phi1(double s); // from 1 to 0
+	double phi2(double s); // from 0 to 1
 };
 
 
