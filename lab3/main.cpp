@@ -21,17 +21,18 @@ int main() {
   // cout << setprecision(10) << "right: " << right.getLength() << std::endl;
 
   Domain myDomain = Domain(top, left, bottom, right);
-  int m = 50; int n = 20;
+  int m = 20; int n = 20;
   myDomain.generate_grid(m, n);
-  vector<double> x_vect = myDomain.getX();
-  vector<double> y_vect = myDomain.getY();
-  cout << setprecision(2);
-  for (int i = 0; i < m+1; ++i) {
-    for (int j = 0; j < n+1; ++j) {
-      cout << "(" << x_vect[j + i*(n + 1)] << ", " << y_vect[j + i*(n + 1)] << ") | \t";
-    }
-    cout << endl;
-  }
+  myDomain.stretch(0.0, 2.0);
+  // vector<double> x_vect = myDomain.getX();
+  // vector<double> y_vect = myDomain.getY();
+  // cout << setprecision(2);
+  // for (int i = 0; i < m+1; ++i) {
+  //   for (int j = 0; j < n+1; ++j) {
+  //     cout << "(" << x_vect[j + i*(n + 1)] << ", " << y_vect[j + i*(n + 1)] << ") | \t";
+  //   }
+  //   cout << endl;
+  // }
 
   myDomain.toFile("myfile.bin");
 }
