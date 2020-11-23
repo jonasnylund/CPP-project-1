@@ -10,10 +10,10 @@
 using namespace std;
 
 int main() {
-  Line top = Line(5, 3, -1, 0, 0, 15, true);
-  Line left = Line(-10, 3, 0, -1, 0, 3, true);
-  ExpBulge bottom = ExpBulge(-3, 6, -10, 5, 0, 1, true);
-  Line right = Line(5, 0, 0, 1, 0, 3, true);
+  Line top = Line(5, 3, -1, 0, 0, 15, false);
+  Line left = Line(-10, 3, 0, -1, 0, 3, false);
+  ExpBulge bottom = ExpBulge(-3, 6, -10, 5, 0, 1, false);
+  Line right = Line(5, 0, 0, 1, 0, 3, false);
 
   Domain myDomain = Domain(top, left, bottom, right);
   // Domain myDomain = Domain(top, right, bottom, left); // if all curves are reversed
@@ -28,6 +28,9 @@ int main() {
   //   }
   //   cout << endl;
   // }
+
+  // Jonas version
+  // myDomain.stretch(0.0, 2.0);
 
   myDomain.toFile("myfile.bin");
 }

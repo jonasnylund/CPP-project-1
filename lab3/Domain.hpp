@@ -5,6 +5,14 @@
 #include <cstdio>
 #include <vector>
 
+
+typedef struct {
+	double x;
+	double y;
+} Point;
+
+
+
 class Domain {
 
 public:
@@ -18,9 +26,14 @@ public:
 
 	~Domain();
 	void generate_grid(int m, int n);
+	// Jonas version
+	// void stretch(double delta_x, double delta_y);
 	void toFile(const char* filename);
+
+	inline Point getPoint(int row, int col);
+
 	std::vector<double> getX();
-  std::vector<double> getY();
+	std::vector<double> getY();
 private:
 	Curvebase *boundary[4];
 
@@ -33,8 +46,9 @@ private:
 	double phi1(const double s); // from 1 to 0
 	double phi2(const double s); // from 0 to 1
 	double stretch(const double sigma, const double delta);
+	inline void setPoint(int row, int col, double x, double y);
+	inline void setPoint(int row, int col, Point p);
 };
-
 
 #endif //DOMAIN_HPP
 

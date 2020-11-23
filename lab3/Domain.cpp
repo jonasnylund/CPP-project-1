@@ -1,8 +1,8 @@
 #include "Domain.hpp"
 #include <stdexcept>
 #include <cmath>
-#include <iostream>
-
+#include <cstdio>
+// #include <iostream>
 bool Domain::closedDomain(Curvebase* curves[], int len){
 
 	Curvebase *prev = curves[len-1];
@@ -100,8 +100,10 @@ void Domain::generate_grid(int m, int n) {
     this->height = m; this->width = n;
     this->x_coor.resize((this->height + 1)* (this->width + 1));
     this->y_coor.resize((this->height + 1)* (this->width + 1));
-		double delta = 3;	
-    double eta, xi;
+    double delta = 3.0;
+		double xi, eta;
+
+    #pragma omp parallel for
     for (int i = 0; i < this->height + 1; ++i) {
       // use 1 - i/m since matrices are indexed top -> bottom
 			eta = stretch(1 - i / (double) m, delta);
@@ -137,6 +139,78 @@ void Domain::generate_grid(int m, int n) {
   }
 }
 
+inline double Domain::stretch(const double sigma, const double delta) {
+	return 1 + tanh(delta * (sigma - 1))/tanh(delta);
+}
+
+// Jonas version
+
+// void Domain::stretch(double delta_x, double delta_y){
+
+// 	if(delta_x != 0.0){
+
+// 		double x0, x1;
+// 		double k;
+// 		Point p;
+// 		for (int row = 0; row < this->height+1; row++){
+// 			x0 = this->getPoint(row, 0).x;
+// 			x1 = this->getPoint(row, this->width).x;
+
+// 			k = (x1-x0);
+// 			for (int col = 1; col < this->width; col++){
+// 				p = this->getPoint(row, col);
+// 				p.x = x0 + k * (1.0 + tanh(delta_x * ((p.x-x0)/(x1-x0) - 1))/tanh(delta_x));
+// 				this->setPoint(row, col, p);
+// 			}
+// 		}
+// 	}
+
+// 	if(delta_y != 0.0){
+
+// 		double y0, y1;
+// 		double k;
+// 		Point p;
+// 		for (int col = 0; col < this->width+1; col++){
+// 			y0 = this->getPoint(0, col).y;
+// 			y1 = this->getPoint(this->height, col).y;
+
+// 			k = y1-y0;
+// 			for (int row = 1; row < this->height; row++){
+// 				p = this->getPoint(row, col);
+// 				p.y = y0 + k * (1.0 + tanh(delta_y * ((p.y-y0)/(y1-y0) - 1))/tanh(delta_y));
+// 				this->setPoint(row, col, p);
+// 			}
+// 		}
+// 	}
+// }
+
+inline Point Domain::getPoint(int row, int col){
+	if (row < 0 || this->height < row)
+		throw std::invalid_argument("row argument must be between 0 and this->height+1");
+	if (col < 0 || this->width < col)
+		throw std::invalid_argument("col argument must be between 0 and this->width+1");
+
+
+	Point p;
+	p.x = this->x_coor[row * (this->width+1) + col];
+	p.y = this->y_coor[row * (this->width+1) + col];
+
+	return p;
+}
+inline void Domain::setPoint(int row, int col, double x, double y){
+	if (row < 0 || this->height < row)
+		throw std::invalid_argument("row argument must be between 0 and this->height+1");
+	if (col < 0 || this->width < col)
+		throw std::invalid_argument("col argument must be between 0 and this->width+1");
+	
+	this->x_coor[row * (this->width+1) + col] = x;
+	this->y_coor[row * (this->width+1) + col] = y;
+}
+
+inline void Domain::setPoint(int row, int col, Point p){
+	this->setPoint(row, col, p.x, p.y);
+}
+
 std::vector<double> Domain::getX() {
   return this->x_coor;
 }
@@ -153,9 +227,5 @@ inline double Domain::phi1(const double s) {
 inline double Domain::phi2(const double s) {
   // from 0 to 1 when s goes from 0 to 1
 	return s;
-}
-
-inline double Domain::stretch(const double sigma, const double delta) {
-	return 1 + tanh(delta * (sigma - 1))/tanh(delta);
 }
 
