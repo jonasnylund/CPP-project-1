@@ -1,7 +1,7 @@
 #include "Domain.hpp"
 #include <stdexcept>
 #include <cmath>
-// #include <iostream>
+#include <iostream>
 
 bool Domain::closedDomain(Curvebase* curves[], int len){
 
@@ -9,6 +9,8 @@ bool Domain::closedDomain(Curvebase* curves[], int len){
 	Curvebase *current = nullptr;
 	for (int i = 0; i < len-1; ++i){
 		current = curves[i];
+		// std::cout << "("<< prev->x(0) << ", " << prev->y(0) << ") (" << prev->x(1) << ", " << prev->y(1) << ")" << std::endl;
+		// std::cout << "("<< current->x(0) << ", " << current->y(0) << ") (" << current->x(1) << ", " << current->y(1) << ")" << std::endl;
 		if (! (abs(prev->x(1) - current->x(0)) < 0.001 && abs(prev->y(1) - current->y(0)) < 0.001)){
 			return false;
 		}
@@ -56,21 +58,10 @@ Domain& Domain::operator=(Domain& d){
 	if (this == &d)
 		return *this;
 
-	// if (this->width != d.width || this->height != d.height){
-	// 	delete[] this->x_coor;
-	// 	delete[] this->y_coor;
-	// 	this->width = d.width;
-	// 	this->height = d.height;
-	// 	this->x_coor = new double[(this.width+1)*(this.height+1)];
-	// 	this->y_coor = new double[(this.width+1)*(this.height+1)];
-	// }
-
 	this->width = d.width;
 	this->height = d.height;
 	this->x_coor = d.x_coor;
 	this->y_coor = d.y_coor;
-	// memcpy(this->x_coor, d.x_coor, sizeof(double)*(this.width+1)*(this.height+1));
-	// memcpy(this->y_coor, d.y_coor, sizeof(double)*(this.width+1)*(this.height+1));
 
 	return *this;
 
@@ -109,36 +100,38 @@ void Domain::generate_grid(int m, int n) {
     this->height = m; this->width = n;
     this->x_coor.resize((this->height + 1)* (this->width + 1));
     this->y_coor.resize((this->height + 1)* (this->width + 1));
-    double xi, eta;
+		double delta = 3;	
+    double eta, xi;
     for (int i = 0; i < this->height + 1; ++i) {
-      xi = i / (double) m;
-			// phi1xi = phi1(xi); phi2xi = phi2(xi);
+      // use 1 - i/m since matrices are indexed top -> bottom
+			eta = stretch(1 - i / (double) m, delta);
       for (int j = 0; j < this->width + 1; ++j) {
-        eta = j / (double) n;
-        this->x_coor[j + i*(this->width + 1)] = phi1(xi) * this->boundary[0]->x(1 - eta)
-                      + phi2(xi) * this->boundary[2]->x(eta)
+				xi = j / (double) n;
+        this->x_coor[j + i*(this->width + 1)] = phi1(xi) * this->boundary[1]->x(1 - eta)
+                      + phi2(xi) * this->boundary[3]->x(eta)
                       + phi1(eta) * (
-                        this->boundary[1]->x(xi)
-                        - phi1(xi) * this->boundary[1]->x(0)
-                        - phi2(xi) * this->boundary[1]->x(1)
+                        this->boundary[2]->x(xi)
+                        - phi1(xi) * this->boundary[2]->x(0)
+                        - phi2(xi) * this->boundary[2]->x(1)
                       )
                       + phi2(eta) * (
-                        this->boundary[3]->x(1 - xi)
-                        - phi1(xi) * this->boundary[3]->x(1)
-                        - phi2(xi) * this->boundary[3]->x(0)
+                        this->boundary[0]->x(1 - xi)
+                        - phi1(xi) * this->boundary[0]->x(1)
+                        - phi2(xi) * this->boundary[0]->x(0)
                       );
-        this->y_coor[j + i*(this->width + 1)] = phi1(xi) * this->boundary[0]->y(1 - eta)
-                      + phi2(xi) * this->boundary[2]->y(eta)
+        this->y_coor[j + i*(this->width + 1)] = 
+											phi1(xi) * this->boundary[1]->y(1 - eta)
+                      + phi2(xi) * this->boundary[3]->y(eta)
                       + phi1(eta) * (
-                        this->boundary[1]->y(xi)
-                        - phi1(xi) * this->boundary[1]->y(0)
-                        - phi2(xi) * this->boundary[1]->y(1)
+                        this->boundary[2]->y(xi)
+                        - phi1(xi) * this->boundary[2]->y(0)
+                        - phi2(xi) * this->boundary[2]->y(1)
                       )
                       + phi2(eta) * (
-                        this->boundary[3]->y(1 - xi)
-                        - phi1(xi) * this->boundary[3]->y(1)
-                        - phi2(xi) * this->boundary[3]->y(0)
-                      );
+                        this->boundary[0]->y(1 - xi)
+                        - phi1(xi) * this->boundary[0]->y(1)
+                        - phi2(xi) * this->boundary[0]->y(0)
+											);
       }
     }
   }
@@ -160,5 +153,9 @@ inline double Domain::phi1(const double s) {
 inline double Domain::phi2(const double s) {
   // from 0 to 1 when s goes from 0 to 1
 	return s;
+}
+
+inline double Domain::stretch(const double sigma, const double delta) {
+	return 1 + tanh(delta * (sigma - 1))/tanh(delta);
 }
 

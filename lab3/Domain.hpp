@@ -32,6 +32,7 @@ private:
 
 	double phi1(const double s); // from 1 to 0
 	double phi2(const double s); // from 0 to 1
+	double stretch(const double sigma, const double delta);
 };
 
 

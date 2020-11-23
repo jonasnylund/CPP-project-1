@@ -29,6 +29,7 @@ double Curvebase::integrate(double p) {
 
 double Curvebase::p_from_s(double s) {
   if (s < 0 || s > 1) throw std::invalid_argument("s must be within [0, 1]");
+  if (this->_rev) s = 1 - s;
   const double tol = 0.0001;
   const int maxiter = 100;
   double p = this->_pmin + s*(this->_pmax - this->_pmin); // choose p_0
@@ -38,7 +39,7 @@ double Curvebase::p_from_s(double s) {
   double f_prime = 0;
   int numIt = 0;
   while (diff > tol && numIt < maxiter) {
-    p = pp;
+    p = pp; // p = p_i; pp = p_{i+1}
     // p_{i+1} = p_i - f(p_i)/f'(p_i)
     // with f(p) = integrate(p) - s * integrate(pmax)
     // f'(p) = \sqrt(dxp(p)^2 + dyp(p)^2) - \sqrt(dxp(pmin)^2 + dyp(pmin)^2) 

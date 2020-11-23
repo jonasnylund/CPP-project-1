@@ -10,17 +10,14 @@
 using namespace std;
 
 int main() {
-  Line top = Line(5, 3, -1, 0, 0, 15, false);
-  Line left = Line(-10, 3, 0, -1, 0, 3, false);
-  ExpBulge bottom = ExpBulge(-3, 6, -10, 5, 0, 1, false);
-  Line right = Line(5, 0, 0, 1, 0, 3, false);
-
-  // cout << setprecision(10) << "top: " << top.getLength() << std::endl;
-  // cout << setprecision(10) << "left: " << left.getLength() << std::endl;
-  // cout << setprecision(10) << "bottom: " << bottom.getLength() << std::endl;
-  // cout << setprecision(10) << "right: " << right.getLength() << std::endl;
+  Line top = Line(5, 3, -1, 0, 0, 15, true);
+  Line left = Line(-10, 3, 0, -1, 0, 3, true);
+  ExpBulge bottom = ExpBulge(-3, 6, -10, 5, 0, 1, true);
+  Line right = Line(5, 0, 0, 1, 0, 3, true);
 
   Domain myDomain = Domain(top, left, bottom, right);
+  // Domain myDomain = Domain(top, right, bottom, left); // if all curves are reversed
+  
   int m = 50; int n = 30;
   myDomain.generate_grid(m, n);
   // vector<double> x_vect = myDomain.getX();
@@ -28,7 +25,6 @@ int main() {
   // for (int i = 0; i < m+1; ++i) {
   //   for (int j = 0; j < n+1; ++j) {
   //     printf("(%6.2f, %6.2f)\t", x_vect[j + i*(n + 1)], y_vect[j + i*(n + 1)]);
-  //     // cout << "(" << x_vect[j + i*(n + 1)] << ", " << y_vect[j + i*(n + 1)] << ") | \t";
   //   }
   //   cout << endl;
   // }

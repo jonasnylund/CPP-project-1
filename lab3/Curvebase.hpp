@@ -5,7 +5,7 @@ class Curvebase {
   protected:
     double _pmin;
     double _pmax;
-    bool _rev; // direction of the curve
+    bool _rev; // direction of the curve 
     double length;
     virtual double xp(double p) = 0;
     virtual double yp(double p) = 0;
