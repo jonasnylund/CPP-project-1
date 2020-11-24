@@ -9,7 +9,7 @@ Curvebase::Curvebase(double pmin, double pmax, bool rev) :
     if (pmin >= pmax) throw std::invalid_argument("pmin needs to be smaller than pmax");
 }
 
-double Curvebase::integrate(double p) {
+double Curvebase::integrate(double p) const {
   // std::cout << p << " " << this->_pmin << " " << this->_pmax << std::endl; 
   validate_p(p);
   const int N = 1000; // number of points in the discretization
@@ -27,7 +27,7 @@ double Curvebase::integrate(double p) {
   return delta_p * res;
 }
 
-double Curvebase::p_from_s(double s) {
+double Curvebase::p_from_s(double s) const {
   if (s < 0 || s > 1) throw std::invalid_argument("s must be within [0, 1]");
   if (this->_rev) s = 1 - s;
   const double tol = 0.0001;
@@ -53,19 +53,19 @@ double Curvebase::p_from_s(double s) {
   return pp;
 }
 
-double Curvebase::x(double s) {
+double Curvebase::x(double s) const {
   return this->xp(this->p_from_s(s));
 }
 
-double Curvebase::y(double s) {
+double Curvebase::y(double s) const {
   return this->yp(this->p_from_s(s));
 }
 
-void Curvebase::validate_p(double p) {
+void Curvebase::validate_p(double p) const {
   if (p < this->_pmin || p > this->_pmax) {
     std::cerr << "(p, pmin, pmax) = (" << p << ", " << _pmin << ", " << _pmax << ")" << std::endl;
     throw std::invalid_argument("p must be within [pmin, pmax]");
   }
 }
 
-double Curvebase::getLength() {return this->integrate(this->_pmax);}
+double Curvebase::getLength() const {return this->integrate(this->_pmax);}

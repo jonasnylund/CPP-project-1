@@ -39,6 +39,12 @@ int main(int argc, char const *argv[])
   ExpBulge bottom = ExpBulge(-3, 6, -10, 5, 0, 1, false);
   Line right = Line(5, 0, 0, 1, 0, 3, false);
 
+  // Test of the basic classes: integrate their length 
+  // printf("len of top boundary %f\n", top.getLength());
+  // printf("len of left boundary %f\n", left.getLength());
+  // printf("len of right boundary %f\n", right.getLength());
+  // printf("len of bottom boundary %f\n", bottom.getLength());
+
   Domain myDomain = Domain(top, left, bottom, right);
   // Domain myDomain = Domain(top, right, bottom, left); // if all curves are reversed
   

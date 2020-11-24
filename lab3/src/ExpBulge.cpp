@@ -13,12 +13,12 @@ ExpBulge::ExpBulge(double a, double b, double x0, double x1,
           if (a <= x0 || a > x1) throw std::invalid_argument("a should be in (x0, x1]");
         }
 
-double ExpBulge::xp(double p) {
+double ExpBulge::xp(double p) const {
   validate_p(p);
   return ((p - _pmin)/(_pmax - _pmin)) * (_x1 - _x0) +  _x0;
 }
 
-double ExpBulge::yp(double p) {
+double ExpBulge::yp(double p) const {
   const double X = xp(p);
   if (X < _a) {
     return 0.5*(1.0/(1.0 + exp(_a*(X + _b))));
@@ -26,11 +26,11 @@ double ExpBulge::yp(double p) {
   return 0.5*(1.0/(1.0 + exp(-_a*X)));
 }
 
-double ExpBulge::dxp(double p) {
+double ExpBulge::dxp(double p) const {
   return (_x1 - _x0) / (_pmax - _pmin);
 }
 
-double ExpBulge::dyp(double p) {
+double ExpBulge::dyp(double p) const {
   const double X = xp(p);
   if (X < _a) {
     return 0.5*(-_a*dxp(p)*exp(_a*(X + _b))/pow(1.0 + exp(_a*(X + _b)), 2));
