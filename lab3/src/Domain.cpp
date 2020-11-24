@@ -47,11 +47,6 @@ Domain::Domain(const Domain& d) :
 
 	this->x_coor = d.x_coor;
 	this->y_coor = d.y_coor;
-	// this->x_coor = new double[*(this.width+1)*(this.height+1)];
-	// this->y_coor = new double[*(this.width+1)*(this.height+1)];
-
-	// memcpy(this->x_coor, d.x_coor, sizeof(double)*(this.width+1)*(this.height+1));
-	// memcpy(this->y_coor, d.y_coor, sizeof(double)*(this.width+1)*(this.height+1));
 }
 	
 Domain& Domain::operator=(Domain& d){
@@ -67,17 +62,6 @@ Domain& Domain::operator=(Domain& d){
 
 }
 
-Domain::~Domain(){
-	// if (this->x_coor != nullptr)
-	// 	// delete[] this->x_coor;
-	// if (this->y_coor != nullptr)
-	// 	// delete[] this->y_coor;
-}
-
-// Domain Domain::fromFile(FILE *file){
-// 	// Ugh, Curvebases..??
-// 	return NULL;
-// }
 
 void Domain::toFile(const char* filename){
 
@@ -142,47 +126,6 @@ void Domain::generate_grid(int m, int n) {
 inline double Domain::stretch(const double sigma, const double delta) {
 	return 1 + tanh(delta * (sigma - 1))/tanh(delta);
 }
-
-// Jonas version
-
-// void Domain::stretch(double delta_x, double delta_y){
-
-// 	if(delta_x != 0.0){
-
-// 		double x0, x1;
-// 		double k;
-// 		Point p;
-// 		for (int row = 0; row < this->height+1; row++){
-// 			x0 = this->getPoint(row, 0).x;
-// 			x1 = this->getPoint(row, this->width).x;
-
-// 			k = (x1-x0);
-// 			for (int col = 1; col < this->width; col++){
-// 				p = this->getPoint(row, col);
-// 				p.x = x0 + k * (1.0 + tanh(delta_x * ((p.x-x0)/(x1-x0) - 1))/tanh(delta_x));
-// 				this->setPoint(row, col, p);
-// 			}
-// 		}
-// 	}
-
-// 	if(delta_y != 0.0){
-
-// 		double y0, y1;
-// 		double k;
-// 		Point p;
-// 		for (int col = 0; col < this->width+1; col++){
-// 			y0 = this->getPoint(0, col).y;
-// 			y1 = this->getPoint(this->height, col).y;
-
-// 			k = y1-y0;
-// 			for (int row = 1; row < this->height; row++){
-// 				p = this->getPoint(row, col);
-// 				p.y = y0 + k * (1.0 + tanh(delta_y * ((p.y-y0)/(y1-y0) - 1))/tanh(delta_y));
-// 				this->setPoint(row, col, p);
-// 			}
-// 		}
-// 	}
-// }
 
 inline Point Domain::getPoint(int row, int col){
 	if (row < 0 || this->height < row)
