@@ -1,8 +1,13 @@
 import matplotlib.pyplot as plt
 import numpy as np
-
+import sys
 
 filename = "myfile.bin"
+
+if(len(sys.argv) > 1):
+	filename = sys.argv[1]
+
+
 file = open(filename, "rb")
 
 width = np.fromfile(file, dtype=np.int32, count=1)[0]
