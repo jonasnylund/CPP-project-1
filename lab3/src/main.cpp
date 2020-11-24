@@ -17,6 +17,7 @@ int main(int argc, char const *argv[])
 {
 
   int m = 50; int n = 30;
+  double delta = 0.0;
   char *file = new char[FILENAME_LEN];
   strncpy(file, "myfile.bin", FILENAME_LEN);
 
@@ -25,7 +26,10 @@ int main(int argc, char const *argv[])
     n = atoi(argv[2]);
   }
   if (argc > 3){
-    strncpy(file, argv[3], FILENAME_LEN);
+    delta = atof(argv[3]);
+  }
+  if (argc > 4){
+    strncpy(file, argv[4], FILENAME_LEN);
   }
 
   printf("Generating %dx%d grid\n", m, n);
@@ -38,18 +42,7 @@ int main(int argc, char const *argv[])
   Domain myDomain = Domain(top, left, bottom, right);
   // Domain myDomain = Domain(top, right, bottom, left); // if all curves are reversed
   
-  myDomain.generate_grid(m, n);
-  // vector<double> x_vect = myDomain.getX();
-  // vector<double> y_vect = myDomain.getY();
-  // for (int i = 0; i < m+1; ++i) {
-  //   for (int j = 0; j < n+1; ++j) {
-  //     printf("(%6.2f, %6.2f)\t", x_vect[j + i*(n + 1)], y_vect[j + i*(n + 1)]);
-  //   }
-  //   cout << endl;
-  // }
-
-  // Jonas version
-  // myDomain.stretch(0.0, 2.0);
+  myDomain.generate_grid(m, n, delta);
 
   myDomain.toFile(file);
   printf("Grid outputted to %s\n", file);
