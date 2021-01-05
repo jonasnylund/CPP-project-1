@@ -123,12 +123,16 @@ GFkt GFkt::dphix_dxi() const {
   double h = 1.0 / grid->xsize();
   for (int i = 0; i < grid->ysize() + 1; ++i) {
     // j == 0
-    tmp.u[i][0] = (1/h) * (grid->getPoint(i, 1).x - grid->getPoint(i, 0).x);
+    // tmp.u[i][0] = (1/h) * (grid->getPoint(i, 1).x - grid->getPoint(i, 0).x);
+    tmp.u[i][0] =  (3*grid->getPoint(i, 0).x - 4*grid->getPoint(i, 1).x + grid->getPoint(i, 2).x) / (3 * h);
     for (int j = 1; j < grid->xsize(); ++j) {
       tmp.u[i][j] = (1/(2*h)) * (grid->getPoint(i, j+1).x - grid->getPoint(i, j-1).x);
     }
     // j == grid->xsize()
-    tmp.u[i][grid->xsize()] = (1/h) * (grid->getPoint(i, grid->xsize()).x - grid->getPoint(i, grid->xsize() - 1).x);
+    // tmp.u[i][grid->xsize()] = (1/h) * (grid->getPoint(i, grid->xsize()).x - grid->getPoint(i, grid->xsize() - 1).x);
+    tmp.u[i][grid->xsize()] = (3*grid->getPoint(i, grid->xsize()).x
+                              -4*grid->getPoint(i, grid->xsize() - 1).x
+                              +  grid->getPoint(i, grid->xsize() - 2).x) / (3 * h);
   }
   return tmp;
 }
@@ -139,12 +143,16 @@ GFkt GFkt::dphiy_dxi() const {
   double h = 1.0 / grid->xsize();
   for (int i = 0; i < grid->ysize() + 1; ++i) {
     // j == 0
-    tmp.u[i][0] = (1/h) * (grid->getPoint(i, 1).y - grid->getPoint(i, 0).y);
+    // tmp.u[i][0] = (1/h) * (grid->getPoint(i, 1).y - grid->getPoint(i, 0).y);
+    tmp.u[i][0] =  (3*grid->getPoint(i, 0).y - 4*grid->getPoint(i, 1).y + grid->getPoint(i, 2).y) / (3 * h);
     for (int j = 1; j < grid->xsize(); ++j) {
       tmp.u[i][j] = (1/(2*h)) * (grid->getPoint(i, j+1).y - grid->getPoint(i, j-1).y);
     }
     // j == grid->xsize()
-    tmp.u[i][grid->xsize()] = (1/h) * (grid->getPoint(i, grid->xsize()).y - grid->getPoint(i, grid->xsize() - 1).y);
+    // tmp.u[i][grid->xsize()] = (1/h) * (grid->getPoint(i, grid->xsize()).y - grid->getPoint(i, grid->xsize() - 1).y);
+    tmp.u[i][grid->xsize()] = (3*grid->getPoint(i, grid->xsize()).y
+                              -4*grid->getPoint(i, grid->xsize() - 1).y
+                              +  grid->getPoint(i, grid->xsize() - 2).y) / (3 * h);
   }
   return tmp;
 }
@@ -155,12 +163,16 @@ GFkt GFkt::dphix_deta() const {
   double h = 1.0 / grid->ysize();
   for (int j = 0; j < grid->xsize() + 1; ++j) {
     // i == 0
-    tmp.u[0][j] = (1/h) * (grid->getPoint(1, j).x - grid->getPoint(0, j).x);
+    // tmp.u[0][j] = (1/h) * (grid->getPoint(1, j).x - grid->getPoint(0, j).x);
+    tmp.u[0][j] =  (3*grid->getPoint(0, j).x - 4*grid->getPoint(1, j).x + grid->getPoint(2, j).x) / (3 * h);
     for (int i = 1; i < grid->ysize(); ++i) {
       tmp.u[i][j] = (1/(2*h)) * (grid->getPoint(i+1, j).x - grid->getPoint(i-1, j).x);
     }
     // i == grid->ysize()
-    tmp.u[grid->ysize()][j] = (1/h) * (grid->getPoint(grid->ysize(), j).x - grid->getPoint(grid->ysize() - 1, j).x);
+    // tmp.u[grid->ysize()][j] = (1/h) * (grid->getPoint(grid->ysize(), j).x - grid->getPoint(grid->ysize() - 1, j).x);
+    tmp.u[grid->ysize()][j] = (3*grid->getPoint(grid->ysize(), j).x
+                              -4*grid->getPoint(grid->ysize() - 1, j).x
+                              +  grid->getPoint(grid->ysize() - 2, j).x) / (3 * h);
   }
   return tmp;
 }
@@ -171,12 +183,16 @@ GFkt GFkt::dphiy_deta() const {
   double h = 1.0 / grid->ysize();
   for (int j = 0; j < grid->xsize() + 1; ++j) {
     // i == 0
-    tmp.u[0][j] = (1/h) * (grid->getPoint(1, j).y - grid->getPoint(0, j).y);
+    // tmp.u[0][j] = (1/h) * (grid->getPoint(1, j).y - grid->getPoint(0, j).y);
+    tmp.u[0][j] =  (3*grid->getPoint(0, j).y - 4*grid->getPoint(1, j).y + grid->getPoint(2, j).y) / (3 * h);
     for (int i = 1; i < grid->ysize(); ++i) {
       tmp.u[i][j] = (1/(2*h)) * (grid->getPoint(i+1, j).y - grid->getPoint(i-1, j).y);
     }
     // i == grid->ysize()
-    tmp.u[grid->ysize()][j] = (1/h) * (grid->getPoint(grid->ysize(), j).y - grid->getPoint(grid->ysize() - 1, j).y);
+    // tmp.u[grid->ysize()][j] = (1/h) * (grid->getPoint(grid->ysize(), j).y - grid->getPoint(grid->ysize() - 1, j).y);
+    tmp.u[grid->ysize()][j] = (3*grid->getPoint(grid->ysize(), j).y
+                          -4*grid->getPoint(grid->ysize() - 1, j).y
+                          +  grid->getPoint(grid->ysize() - 2, j).y) / (3 * h);
   }
   return tmp;
 }
@@ -188,12 +204,16 @@ GFkt GFkt::du_dxi() const {
   double h = 1.0 / grid->xsize();
   for (int i = 0; i < grid->ysize() + 1; ++i) {
     // j == 0
-    tmp.u[i][0] = (1/h) * (u[i][1] - u[i][0]);
+    // tmp.u[i][0] = (1/h) * (u[i][1] - u[i][0]);
+    tmp.u[i][0] = (3*u[i][0] - 4*u[i][1] + u[i][2]) / (3 * h);
     for (int j = 1; j < grid->xsize(); ++j) {
       tmp.u[i][j] = (1/(2*h)) * (u[i][j+1] - u[i][j-1]);
     }
     //j == grid->xsize()
-    tmp.u[i][grid->xsize()] = (1/h) * (u[i][grid->xsize()] - u[i][grid->xsize()-1]);
+    // tmp.u[i][grid->xsize()] = (1/h) * (u[i][grid->xsize()] - u[i][grid->xsize()-1]);
+    tmp.u[i][grid->xsize()] = (3*u[i][grid->xsize()]
+                              - 4*u[i][grid->xsize() - 1]
+                              + u[i][grid->xsize() - 2]) / (3 * h);
   }
   return tmp;
 }
@@ -204,22 +224,32 @@ GFkt GFkt::du_deta() const {
   double h = 1.0 / grid->ysize();
   for (int j = 0; j < grid->xsize() + 1; ++j) {
     // i == 0
-    tmp.u[0][j] = (1/h) * (u[1][j] - u[0][j]);
+    // tmp.u[0][j] = (1/h) * (u[1][j] - u[0][j]);
+    tmp.u[0][j] = (3*u[0][j] - 4*u[1][j] + u[2][j]) / (3 * h);
     for (int i = 1; i < grid->ysize(); ++i) {
       tmp.u[i][j] = (1/(2*h)) * (u[i+1][j] - u[i-1][j]);
     }
     //i == grid->ysize()
-    tmp.u[grid->ysize()][j] = (1/h) * (u[grid->ysize()][j] - u[grid->ysize() - 1][j]);
+    // tmp.u[grid->ysize()][j] = (1/h) * (u[grid->ysize()][j] - u[grid->ysize() - 1][j]);
+    tmp.u[grid->ysize()][j] = (3*u[grid->ysize()][j]
+                              - 4*u[grid->ysize() - 1][j]
+                              + u[grid->ysize() - 2][j]) / (3 * h);
   }
   return tmp;
 }
 
 GFkt GFkt::du_dx() const {
+  if (grid->xsize() < 2 || grid->ysize() < 2) {
+    exit(-1);
+  }
   GFkt tmp = detJinv() * (du_dxi() * dphiy_deta() - du_deta() * dphiy_dxi());
   return tmp;
 }
 
 GFkt GFkt::du_dy() const {
+  if (grid->xsize() < 2 || grid->ysize() < 2) {
+    exit(-1);
+  }
   GFkt tmp = detJinv() * (du_deta() * dphix_dxi() - du_dxi() * dphix_deta());
   return tmp;
 }
