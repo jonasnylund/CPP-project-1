@@ -94,12 +94,12 @@ const GFkt operator*(const double k, GFkt& gf) {
   return gf * k;
 }
 
-const GFkt& GFkt::operator/=(const double k) const {
+const GFkt& GFkt::operator/=(const double k) {
   u /= k;
   return *this;
 }
 
-const GFkt::GFkt operator/(const double k) const {
+const GFkt GFkt::operator/(const double k) const {
   GFkt res(*this);
   res /= k;
   return res; 
