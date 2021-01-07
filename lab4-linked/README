@@ -1,0 +1,1 @@
+Project 4, more or less identical in functionality and performance to folder "lab4", but linked statically to the code from lab 2 and 3. To update Matrix and/or Domain classes (from unix system), go to respective folder of the code, and run make lib. This will recompile the classes and push a libmatrix.a or libdomain.a library to the lib/ folder. Then compile using make.
