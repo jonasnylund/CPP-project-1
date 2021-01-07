@@ -10,6 +10,7 @@
 Matrix Matrix::eye(const unsigned int n)
 {
 	Matrix m(n);
+	#pragma omp parallel for
 	for(unsigned int i=0; i<n; i++){
 		for (unsigned int j=0; j<n; j++){
 			if (i == j) m[i][i] = 1.0;
@@ -89,6 +90,7 @@ Matrix& Matrix::operator+=(const Matrix& matrix)
 
 Matrix& Matrix::operator+=(const double value)
 {
+
 	for(unsigned int i=0; i<this->rows*this->cols; i++){
 		this->array[i] += value;
 	}
@@ -131,8 +133,10 @@ Matrix& Matrix::operator*=(const Matrix& matrix)
 	double *arr = new double[matrix.cols*this->rows];
 	memset(arr, 0, sizeof(double)*matrix.cols*this->rows);
 
+	#pragma omp parallel for
 	for( unsigned int i=0; i<this->rows; i++){
 		for( unsigned int k=0; k<this->cols; k++){
+			#pragma GCC ivdep
 			for( unsigned int j=0; j<matrix.cols; j++){
 				arr[i * matrix.cols + j] += (*this)[i][k] * matrix[k][j];
 			}
@@ -156,6 +160,7 @@ Matrix operator*(const Matrix& m1, const Matrix& m2)
 
 Matrix& Matrix::operator*=(const double value)
 {
+
 	for( unsigned int i=0; i<this->rows*this->cols; i++){
 		this->array[i] *= value;
 	}
@@ -219,7 +224,9 @@ Matrix Matrix::transpose() const
 {
 	Matrix m(this->cols, this->rows);
 
+	#pragma omp parallel for
 	for(unsigned int i=0; i<this->rows; i++){
+		#pragma GCC ivdep
 		for(unsigned int j=0; j<this->cols; j++){
 			m[j][i] = (*this)[i][j];
 		}
@@ -231,6 +238,7 @@ double Matrix::norm() const
 {
 	double res = 0;
 
+	#pragma omp parallel for reduction(+:res)
 	for (unsigned long i=0; i<this->rows*this->cols; i++){
 		res += this->array[i]*this->array[i];
 	}
@@ -275,7 +283,15 @@ inline unsigned int Matrix::index(unsigned int i, unsigned int j) const
 	return i * this->cols + j;
 }
 
-double* Matrix::getArray()
+double* Matrix::getArray() const
 {
 	return this->array;
+}
+
+unsigned Matrix::getRows() const {
+	return rows;
+}
+
+unsigned Matrix::getCols() const {
+	return cols;
 }
