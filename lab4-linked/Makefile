@@ -1,5 +1,5 @@
 CC=g++
-LIBS=-L../lab3/bin/ -L../lab2/2-2_matrix/ -ldomain -lmatrix
+LIBS=-Llib/ -ldomain -lmatrix
 INCLUDES=-Iinclude/ -I../lab3/include/ -I../lab2/2-2_matrix/
 CFLAGS:=-Wall -std=c++14 -fopenmp -O3 $(INCLUDES) 
 DEPS:=$(shell ls include/*.hpp)

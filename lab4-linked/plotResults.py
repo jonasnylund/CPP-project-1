@@ -13,6 +13,7 @@ def true_vals(x, y, mode):
 def main():
     clrs = ["blue", "red", "green", "yellow"]
     variants = ["u", "xder", "yder", "Laplace"]
+    title = [r"$u(x_i,y_i)$", r"$u'_x(x_i,y_i)$", r"$u'_y(x_i,y_i)$", r"$\Delta u (x_i,y_i)$"]
     # variants = ["u", "xder"]
 
     for i, filename_base in enumerate(variants):
@@ -34,11 +35,13 @@ def main():
         ax.scatter(x, y, z, c=clrs[i], label="Numerical")
         if i > 0:
             true_z = true_vals(x, y, mode=variants[i])
-            ax.scatter(x, y, true_z, c='k', label="True")
+            ax.scatter(x, y, true_z, c='k', label="Algebraic")
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("z")
-        ax.set_title(variants[i])
+        ax.set_title(title[i])
+        if (i == 2):
+            ax.set_zlim((0.99, 1.01))
         ax.legend()
     
     plt.show()
