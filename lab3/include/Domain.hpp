@@ -27,10 +27,18 @@ public:
 	void generate_grid(const int m, const int n, const double delta=0.0);
 	void toFile(const char* filename) const;
 
-	inline Point getPoint(int row, int col) const;
+	Point getPoint(int row, int col) const;
+	double getX(int row, int col) const;
+	double getY(int row, int col) const;
 
 	std::vector<double> getX() const;
 	std::vector<double> getY() const;
+
+	int xsize() const;
+	int ysize() const;
+
+	bool grid_valid();
+	
 private:
 	Curvebase *boundary[4];
 
@@ -43,8 +51,8 @@ private:
 	static double phi1(const double s); // from 1 to 0
 	static double phi2(const double s); // from 0 to 1
 	static double stretch(const double sigma, const double delta);
-	inline void setPoint(int row, int col, double x, double y);
-	inline void setPoint(int row, int col, Point p);
+	void setPoint(int row, int col, double x, double y);
+	void setPoint(int row, int col, Point p);
 };
 
 #endif //DOMAIN_HPP

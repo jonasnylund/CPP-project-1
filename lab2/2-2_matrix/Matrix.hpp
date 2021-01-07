@@ -35,7 +35,9 @@ public:
 		unsigned int ox,
 		unsigned int oy);
 
-	double* getArray();
+	double* getArray() const;
+	unsigned getRows() const;
+	unsigned getCols() const;
 
 private:
 

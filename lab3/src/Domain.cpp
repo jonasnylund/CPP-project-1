@@ -79,61 +79,61 @@ void Domain::toFile(const char* filename) const{
 }
 
 void Domain::generate_grid(const int m, const int n, const double delta) {
-  if (m <= 0 || n <= 0) throw std::invalid_argument("m and n needs to be positive");
-  else { // if a grid already exists, overwrite this
-    this->height = m; this->width = n;
-    this->x_coor.resize((this->height + 1)* (this->width + 1));
-    this->y_coor.resize((this->height + 1)* (this->width + 1));
-		double xi, eta;
+	if (m <= 0 || n <= 0) throw std::invalid_argument("m and n needs to be positive");
+	// if a grid already exists, overwrite this
+	this->height = m; this->width = n;
+	this->x_coor.resize((this->height + 1)* (this->width + 1));
+	this->y_coor.resize((this->height + 1)* (this->width + 1));
+	double xi, eta;
 
-    #pragma omp parallel for private(xi, eta)
-    for (int i = 0; i < this->height + 1; ++i) {
-      // use 1 - i/m since matrices are indexed top -> bottom
-			eta = Domain::stretch(1 - i / (double) m, delta);
-      for (int j = 0; j < this->width + 1; ++j) {
-				xi = j / (double) n;
-        this->x_coor[j + i*(this->width + 1)] = phi1(xi) * this->boundary[1]->x(1 - eta)
-                      + phi2(xi) * this->boundary[3]->x(eta)
-                      + phi1(eta) * (
-                        this->boundary[2]->x(xi)
-                        - phi1(xi) * this->boundary[2]->x(0)
-                        - phi2(xi) * this->boundary[2]->x(1)
-                      )
-                      + phi2(eta) * (
-                        this->boundary[0]->x(1 - xi)
-                        - phi1(xi) * this->boundary[0]->x(1)
-                        - phi2(xi) * this->boundary[0]->x(0)
-                      );
-        this->y_coor[j + i*(this->width + 1)] = 
-											phi1(xi) * this->boundary[1]->y(1 - eta)
-                      + phi2(xi) * this->boundary[3]->y(eta)
-                      + phi1(eta) * (
-                        this->boundary[2]->y(xi)
-                        - phi1(xi) * this->boundary[2]->y(0)
-                        - phi2(xi) * this->boundary[2]->y(1)
-                      )
-                      + phi2(eta) * (
-                        this->boundary[0]->y(1 - xi)
-                        - phi1(xi) * this->boundary[0]->y(1)
-                        - phi2(xi) * this->boundary[0]->y(0)
-											);
-      }
-    }
-  }
+	#pragma omp parallel for private(xi, eta)
+	for (int i = 0; i < this->height + 1; ++i) {
+		// use 1 - i/m since matrices are indexed top -> bottom
+		eta = Domain::stretch(1 - i / (double) m, delta);
+	
+		#pragma GCC ivdep
+		for (int j = 0; j < this->width + 1; ++j) {
+			xi = j / (double) n;
+			this->x_coor[j + i*(this->width + 1)] = this->phi1(xi) * this->boundary[1]->x(1 - eta)
+										+ this->phi2(xi) * this->boundary[3]->x(eta)
+										+ this->phi1(eta) * (
+											this->boundary[2]->x(xi)
+											- this->phi1(xi) * this->boundary[2]->x(0)
+											- this->phi2(xi) * this->boundary[2]->x(1)
+										)
+										+ this->phi2(eta) * (
+											this->boundary[0]->x(1 - xi)
+											- this->phi1(xi) * this->boundary[0]->x(1)
+											- this->phi2(xi) * this->boundary[0]->x(0)
+										);
+			this->y_coor[j + i*(this->width + 1)] = 
+										this->phi1(xi) * this->boundary[1]->y(1 - eta)
+										+ this->phi2(xi) * this->boundary[3]->y(eta)
+										+ this->phi1(eta) * (
+											this->boundary[2]->y(xi)
+											- this->phi1(xi) * this->boundary[2]->y(0)
+											- this->phi2(xi) * this->boundary[2]->y(1)
+										)
+										+ this->phi2(eta) * (
+											this->boundary[0]->y(1 - xi)
+											- this->phi1(xi) * this->boundary[0]->y(1)
+											- this->phi2(xi) * this->boundary[0]->y(0)
+										);
+		}
+	}
 }
 
-inline double Domain::stretch(const double sigma, const double delta) {
+double Domain::stretch(const double sigma, const double delta) {
 	if (delta == 0)
 		return sigma;
 	return 1 + tanh(delta * (sigma - 1))/tanh(delta);
 }
 
-inline Point Domain::getPoint(int row, int col) const{
+Point Domain::getPoint(int row, int col) const {
 	if (row < 0 || this->height < row)
 		throw std::invalid_argument("row argument must be between 0 and this->height+1");
 	if (col < 0 || this->width < col)
 		throw std::invalid_argument("col argument must be between 0 and this->width+1");
-
 
 	Point p;
 	p.x = this->x_coor[row * (this->width+1) + col];
@@ -141,7 +141,8 @@ inline Point Domain::getPoint(int row, int col) const{
 
 	return p;
 }
-inline void Domain::setPoint(int row, int col, double x, double y){
+
+void Domain::setPoint(int row, int col, double x, double y){
 	if (row < 0 || this->height < row)
 		throw std::invalid_argument("row argument must be between 0 and this->height+1");
 	if (col < 0 || this->width < col)
@@ -151,25 +152,36 @@ inline void Domain::setPoint(int row, int col, double x, double y){
 	this->y_coor[row * (this->width+1) + col] = y;
 }
 
-inline void Domain::setPoint(int row, int col, Point p){
+void Domain::setPoint(int row, int col, Point p){
 	this->setPoint(row, col, p.x, p.y);
 }
 
+double Domain::getX(int row, int col) const{
+	return this->x_coor[row * (this->width+1) + col];
+}
+double Domain::getY(int row, int col) const{
+	return this->y_coor[row * (this->width+1) + col];
+}
+
 std::vector<double> Domain::getX() const {
-  return this->x_coor;
+	return this->x_coor;
 }
 
 std::vector<double> Domain::getY() const {
-  return this->y_coor;
+	return this->y_coor;
 }
 
-inline double Domain::phi1(const double s) {
-  // from 1 to 0 when s goes from 0 to 1
+double Domain::phi1(const double s) {
+	// from 1 to 0 when s goes from 0 to 1
 	return 1.0 - s;
 }
 
-inline double Domain::phi2(const double s) {
-  // from 0 to 1 when s goes from 0 to 1
+double Domain::phi2(const double s) {
+	// from 0 to 1 when s goes from 0 to 1
 	return s;
 }
 
+int Domain::xsize() const { return this->width; }
+int Domain::ysize() const { return this->height; }
+
+bool Domain::grid_valid() { return this->width != 0; }
