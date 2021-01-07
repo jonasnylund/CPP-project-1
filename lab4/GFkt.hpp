@@ -40,11 +40,30 @@ class GFkt {
     // ~GFkt(); not needed since we use std::shared_ptr<Domain> for grid
 
     void set_values(double (*f)(double x, double y));
-    void set_values(Matrix _u);
-    GFkt du_dx() const;
-    GFkt du_dy() const;
-    GFkt Laplace() const;
-    Matrix get_values() const;
+    inline void set_values(Matrix _u) { u = _u; }
+    inline GFkt du_dx() const {
+      if (grid->xsize() < 2 || grid->ysize() < 2) {
+        exit(-1);
+      }
+      GFkt tmp = detJinv() * (du_dxi() * dphiy_deta() - du_deta() * dphiy_dxi());
+      return tmp;
+    }
+
+    inline GFkt du_dy() const {
+      if (grid->xsize() < 2 || grid->ysize() < 2) {
+        exit(-1);
+      }
+      GFkt tmp = detJinv() * (du_deta() * dphix_dxi() - du_dxi() * dphix_deta());
+      return tmp;
+    }
+
+    inline GFkt Laplace() const {
+      GFkt ddxx = (this->du_dx()).du_dx();
+      GFkt ddyy = (this->du_dy()).du_dy();
+      return ddxx + ddyy;  
+    }
+
+    inline Matrix get_values() const { return this->u; }
 
     void toFile(const char* filename) const;
 };

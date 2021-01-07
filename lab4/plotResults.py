@@ -27,6 +27,9 @@ def main():
         fig = plt.figure()
         ax = plt.axes(projection='3d')
 
+        err_fig = plt.figure()
+        err_ax = plt.axes(projection='3d')
+
         x = data[:,0]
         y = data[:,1]
         z = data[:,2]
@@ -35,10 +38,15 @@ def main():
         if i > 0:
             true_z = true_vals(x, y, mode=variants[i])
             ax.scatter(x, y, true_z, c='k')
+            err_ax.scatter(x, y, np.abs(z - true_z), c = 'r')
         ax.set_xlabel("x")
         ax.set_ylabel("y")
         ax.set_zlabel("z")
         ax.set_title(variants[i])
+        err_ax.set_xlabel("x")
+        err_ax.set_ylabel("y")
+        err_ax.set_zlabel("z")
+        err_ax.set_title(variants[i]+" abs. err.")
     
     plt.show()
 

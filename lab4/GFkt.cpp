@@ -10,7 +10,6 @@
 
 GFkt::GFkt(std::shared_ptr<Domain> _grid) : u(_grid->ysize()+1, _grid->xsize()+1),
                                             grid(_grid) { } 
-// TODO: fix copy assignment, make sure it works even though u, grid are private
 GFkt::GFkt(const GFkt& gf) : u(gf.u), grid(gf.grid) { }
 
 GFkt GFkt::detJinv() const {
@@ -19,7 +18,7 @@ GFkt GFkt::detJinv() const {
   for (int i = 0; i < vals.getRows(); ++i) {
     for (int j = 0; j < vals.getCols(); ++j) {
       if (vals[i][j] == 0.0) {
-        vals[i][j] = 0.00001;
+        vals[i][j] = 0.000001; // avoid division by 0
       }
       vals[i][j] = 1.0 / vals[i][j];
     }
@@ -43,12 +42,11 @@ const GFkt& GFkt::operator+=(const GFkt& gf) {
 }
 
 const GFkt GFkt::operator+(const GFkt& gf) const {
-  // TODO: check if defined on the same grid
-  // if (grid == gf.grid) { // defined on the same grid
+  if (*grid == *(gf.grid)) { // defined on the same grid
     GFkt res(gf);
     res.u = u + gf.u;
     return res;
-  // } else throw std::invalid_argument("Addition of grid functions require identical grids.");
+  } else throw std::invalid_argument("Addition of grid functions require identical grids.");
 }
 
 const GFkt& GFkt::operator-=(const GFkt& gf) {
@@ -57,12 +55,11 @@ const GFkt& GFkt::operator-=(const GFkt& gf) {
 }
 
 const GFkt GFkt::operator-(const GFkt& gf) const {
-  // TODO: check if defined on the same grid
-  // if (grid == gf.grid) { // defined on the same grid
+  if (*grid == *(gf.grid)) { // defined on the same grid
     GFkt res(gf);
     res.u = u - gf.u;
     return res;
-  // } else throw std::invalid_argument("Subtraction of grid functions require identical grids.");
+  } else throw std::invalid_argument("Subtraction of grid functions require identical grids.");
 }
 
 const GFkt& GFkt::operator*=(const double k) {
@@ -71,9 +68,7 @@ const GFkt& GFkt::operator*=(const double k) {
 }
 
 const GFkt GFkt::operator*(const GFkt& gf) const {
-  // TODO: check if defined on the same grid
-  
-  // if (grid == gf.grid) { // defined on the same grid
+  if (*grid == *(gf.grid)) { // defined on the same grid
     GFkt res(grid);
     for (int i = 0; i < grid->ysize() + 1; ++i) {
       for (int j = 0; j < grid->xsize() + 1; ++j) {
@@ -81,7 +76,7 @@ const GFkt GFkt::operator*(const GFkt& gf) const {
       }
     }
     return res;
-  // } else throw std::invalid_argument("Multiplication of grid functions require identical grids.");
+  } else throw std::invalid_argument("Multiplication of grid functions require identical grids.");
 }
 
 const GFkt GFkt::operator*(const double k) const {
@@ -103,10 +98,6 @@ const GFkt GFkt::operator/(const double k) const {
   GFkt res(*this);
   res /= k;
   return res; 
-}
-
-void GFkt::set_values(Matrix _u) {
-  u = _u;
 }
 
 void GFkt::set_values(double (*f)(double x, double y)) {
@@ -238,40 +229,13 @@ GFkt GFkt::du_deta() const {
   return tmp;
 }
 
-GFkt GFkt::du_dx() const {
-  if (grid->xsize() < 2 || grid->ysize() < 2) {
-    exit(-1);
-  }
-  GFkt tmp = detJinv() * (du_dxi() * dphiy_deta() - du_deta() * dphiy_dxi());
-  return tmp;
-}
-
-GFkt GFkt::du_dy() const {
-  if (grid->xsize() < 2 || grid->ysize() < 2) {
-    exit(-1);
-  }
-  GFkt tmp = detJinv() * (du_deta() * dphix_dxi() - du_dxi() * dphix_deta());
-  return tmp;
-}
-
-GFkt GFkt::Laplace() const {
-  GFkt ddxx = (this->du_dx()).du_dx();
-  GFkt ddyy = (this->du_dy()).du_dy();
-  return ddxx + ddyy;  
-}
-
-Matrix GFkt::get_values() const {
-  return this->u;
-}
-
 void GFkt::toFile(const char* filename) const {
   std::ofstream ofile;
-  std::cout << "hello: " << filename << std::endl;
   ofile.open(filename);
-  // if (!of) {
-  //   std::cerr << "Error opening output file!";
-  //   exit(1);
-  // }
+  if (!ofile) {
+    std::cerr << "Error opening output file!";
+    exit(1);
+  }
   ofile << grid->ysize() << ", ";
   ofile << grid->xsize() << "\n";
   const std::vector<double> xvals = grid->getX();

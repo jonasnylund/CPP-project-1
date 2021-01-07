@@ -36,6 +36,9 @@
     "streambuf": "cpp",
     "utility": "cpp",
     "typeinfo": "cpp",
-    "string": "cpp"
+    "string": "cpp",
+    "cstddef": "cpp",
+    "cstring": "cpp",
+    "memory": "cpp"
   }
 }

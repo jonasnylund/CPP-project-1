@@ -72,8 +72,15 @@ bool Domain::operator==(Domain& d) const {
 		if (boundary[i] != d.boundary[i]) return false;
 	}
 	if (!(width == d.width && height == d.height)) return false;
-	// for (auto const& val)
-	// add checks that all values are the same
+	std::vector<double> x_coor_d = d.getX();
+	for (int j = 0; j < width; ++j) {
+		if (x_coor[j] != x_coor_d[j]) return false;
+	}
+	std::vector<double> y_coor_d = d.getY();
+	for (int i = 0; i < height; ++i) {
+		if (y_coor[i] != y_coor_d[i]) return false;
+	}
+	return true;
 } 
 
 void Domain::toFile(const char * filename) const {
