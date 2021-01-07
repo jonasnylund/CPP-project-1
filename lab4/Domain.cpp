@@ -68,19 +68,31 @@ Domain& Domain::operator=(Domain& d){
 }
 
 bool Domain::operator==(Domain& d) const {
+	if (this == &d)
+		return true;
+
 	for (int i = 0; i < 4; ++i) {
-		if (boundary[i] != d.boundary[i]) return false;
+		if (boundary[i] != d.boundary[i]) 
+			return false;
 	}
-	if (!(width == d.width && height == d.height)) return false;
+	if (!(width == d.width && height == d.height)) 
+		return false;
+
 	std::vector<double> x_coor_d = d.getX();
 	for (int j = 0; j < width; ++j) {
-		if (x_coor[j] != x_coor_d[j]) return false;
+		if (x_coor[j] != x_coor_d[j]) 
+			return false;
 	}
 	std::vector<double> y_coor_d = d.getY();
 	for (int i = 0; i < height; ++i) {
-		if (y_coor[i] != y_coor_d[i]) return false;
+		if (y_coor[i] != y_coor_d[i]) 
+			return false;
 	}
 	return true;
+}
+
+bool Domain::operator!=(Domain& d) const {
+	return !(*this == d);
 } 
 
 void Domain::toFile(const char * filename) const {

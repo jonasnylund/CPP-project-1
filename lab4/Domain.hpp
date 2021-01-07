@@ -24,6 +24,7 @@ public:
 	Domain& operator=(Domain& d);
 
 	bool operator==(Domain& d) const;
+	bool operator!=(Domain& d) const;
 
 	void generate_grid(const int m, const int n, const double delta=0.0);
 	void toFile(const char* filename) const;
